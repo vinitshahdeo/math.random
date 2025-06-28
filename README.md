@@ -1,3 +1,4 @@
+![carbon](https://github.com/user-attachments/assets/c2edf6e0-3a03-4a4e-ae26-5de71dbd859d)
 
 # Math.random() is Not Random: A JavaScript Perspective
  
