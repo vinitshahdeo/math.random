@@ -119,7 +119,9 @@ To keep a light tone: using Math.random for crypto is like using a rubber sword 
 ## Thank you:)
 
 <br />
+<p align="center">
 <a href="https://github.com/vinitshahdeo"><img src="https://img.shields.io/github/followers/vinitshahdeo"/></a>
+</p>
 <br/>
 <a href="https://www.google.com/search?q=Vinit+Shahdeo">
   <table align="left">
