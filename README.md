@@ -101,58 +101,6 @@ The lava lamp approach (nicknamed **LavaRand**) is a clever reminder that random
 
 In summary, **randomness is fundamentally a hardware/domain issue**: you need entropy from somewhere. Math.random doesn’t have access to magical entropy; it’s a closed algorithm. Quantum or not, if you need randomness, you must go outside the algorithmic box – to the OS, to hardware, to physics.
 
-## Demo Ideas and Fun Experiments (for the Presentation)
-
-To keep the presentation lively, here are a few **demo or snippet ideas** that illustrate Math.random’s behavior:
-
-* **Deterministic Seed Demo:** Demonstrate that Math.random is deterministic by using V8’s seeding feature. For example, run a Node.js snippet with a fixed seed and show that it produces the same “random” numbers every time:
-
-  ```bash
-  node --random_seed=42 -e "console.log(Math.random(), Math.random(), Math.random())"
-  ```
-
-  Run that command twice – you’ll get identical outputs on both runs. This visibly drives home the point that given the same seed, Math.random doesn’t surprise us at all – it’s like playing back a recorded sequence.
-* **Custom PRNG vs Math.random:** Implement a tiny linear congruential generator (LCG) in JavaScript to show how pseudorandom sequences work. For example:
-
-  ```js
-  function makeLCG(seed) {
-    return function() {
-      // an LCG with constants like in Numerical Recipes
-      seed = (1664525 * seed + 1013904223) >>> 0; // >>>0 to keep it 32-bit
-      return seed / 0x100000000; // scale to [0,1)
-    }
-  }
-  let randA = makeLCG(1234);
-  let randB = makeLCG(1234);
-  console.log(randA(), randA(), randA());
-  console.log(randB(), randB(), randB());
-  ```
-
-  You’ll see that `randA` and `randB` (same seed) produce identical sequences. It’s essentially a mini Math.random. You could even compare its output distribution to Math.random’s.
-* **Distribution Test:** A quick visual demo: generate, say, 10,000 random points (x,y) using Math.random and plot them. They should appear as a fairly uniform scatter in a 1x1 square – no obvious pattern (which is good). Then jokingly, you could “tamper” with the algorithm to show a bad case – e.g., use an LCG known to produce patterns and show how points fall along lines (a classic example: older bad RNGs like RANDU in the 1960s would produce points that lie on a few planes). This contrasts a high-quality vs low-quality PRNG.
-* **Collisions Demo:** Recreate a mini version of the Betable scenario. For instance, generate random 6-character strings with Math.random on an older engine or a constrained PRNG and see how many you can generate before a duplicate occurs. You might simulate an MWC1616 in JS and actually attempt to generate IDs, showing that after a certain number it must repeat. This is more conceptual, but you could explain: “If our PRNG has only 2^32 states, then generating 2^32+1 values *guarantees* a repeat (pigeonhole principle). Even at far fewer, you start getting collisions by probability.”
-* **Security No-No Demo:** Show a simple example of why you shouldn’t use Math.random for something like a password. For instance:
-
-  ```js
-  function generatePassword() {
-    // (This is a BAD approach!)
-    return Math.random().toString(36).slice(-8);
-  }
-  console.log("Generated password:", generatePassword());
-  ```
-
-  This might print something like “fj39x0qz”. Looks random, right? Then explain how an attacker could brute-force this because Math.random only has 2^52 possible outputs *in theory*, and far less in practice per run. If the attacker can run the same code (knowing your algorithm), they could generate all possible outputs by iterating seeds or observing multiple outputs to narrow down the state. Alternatively, show that if you run generatePassword 5 times in a row, you can guess the next one if you understood the sequence.
-* **Monkey-Patch Fun:** As a light-hearted interlude: demonstrate that Math.random can be monkey-patched in JS. E.g.:
-
-  ```js
-  Math.random = function() { return 0.42; }
-  console.log(Math.random()); // always 0.42
-  ```
-
-  This tongue-in-cheek demo shows “Math.random is *really* not random now!” 😄 It’s a reminder that in the browser, any code can override Math.random (so if some untrusted script did that, it could even weaken the randomness further). It’s also useful for tests (people sometimes patch Math.random to produce predictable output for test cases).
-
-The goal of these demos is to reinforce the concepts in an interactive way. The audience will remember seeing identical “random” sequences or a silly constant random output, which hammers home the deterministic nature. Just ensure any live coding is done in a controlled manner (we don’t want the demo gods to strike 😜). For safety, precompute some outputs or have fallbacks.
-
 ## Conclusion
 
 We’ve seen that **Math.random() is definitely not truly random** – it’s a PRNG with specific internal algorithms and limitations. For about 80% of use cases (non-security, small-scale randomness needs), Math.random is fine – it’s fast and now of decent quality statistically. But for the other 20% of cases where randomness really **matters** – security tokens, significant money or data at stake, stringent uniqueness requirements – you should **not rely on Math.random()**. Instead, use the available cryptographic random APIs or libraries, which are designed to be unpredictable and robust.
@@ -167,3 +115,28 @@ To keep a light tone: using Math.random for crypto is like using a rubber sword 
 * For anything requiring security or strong uniqueness, **use cryptographic randomness**: `crypto.getRandomValues` in the browser, or Node’s crypto module. These draw from true entropy and are designed to be unpredictable.
 * If you need reproducible sequences (for tests or simulations), use a seedable PRNG library rather than Math.random, since Math.random can’t be seeded manually in a standard way. There are many well-known algorithms (Mersenne Twister, etc.) implemented in JS if needed.
 * Quantum computers don’t change the fundamentals of randomness – you still need entropy. In fact, quantum phenomena can be great entropy sources, but your code will still use APIs to get those random numbers if available. Always keep an eye on future developments in random number generation – as computing evolves, we might get even better sources (perhaps someday `Math.quantumRandom()`? 😉).
+
+## Thank you:)
+
+<br />
+<a href="https://github.com/vinitshahdeo"><img src="https://img.shields.io/github/followers/vinitshahdeo"/></a>
+<br/>
+<a href="https://www.google.com/search?q=Vinit+Shahdeo">
+  <table align="left">
+      <tr>
+          <td>
+            😊&nbsp;&nbsp;Learn more about me!
+          </td>
+      </tr>
+  </table>
+</a>
+<a href="https://vinitshahdeo.dev">
+  <table align="right">
+      <tr>
+          <td>
+            🌐 &nbsp;&nbsp;Explore my blog!
+          </td>
+      </tr>
+  </table>
+</a>
+  
