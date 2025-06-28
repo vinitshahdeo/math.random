@@ -1,5 +1,9 @@
 
 # Math.random() is Not Random: A JavaScript Perspective
+ 
+> [!NOTE]
+> Read a detailed recap of my talk at [Git Togethers Bengaluru](https://www.meetup.com/gittogether-bengaluru/events/307544138)
+> Let’s connect on [LinkedIn](https://www.linkedin.com/in/vinitshahdeo) | [Twitter](https://x.com/vinit_shahdeo)!
 
 ## Introduction
 
